@@ -42,14 +42,17 @@ Instructions
         <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
         <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 
-  Add this after the last import task:
+Add this after the last import task:
   
-        <Import Project="DeploymentManager.targets" />
+    <Import Project="DeploymentManager.targets" />
   
-  NOTE: Be sure that the DeploymentManager.target file already exists in your project, or it will fail to load when you open your project next time.
+NOTE: Be sure that the DeploymentManager.target file already exists in your project, or it will fail to load when you open your project next time.
 
   
-###In your build (assuming you're using the default template for your builds):
+###In your build
+
+*NOTE: I'm assuming you're using the default template for your build*
+
 1. Go to the Process section and expand section 3, Advanced.
 2. Include these arguments in the MSBuild Arguments section:
 
