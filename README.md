@@ -38,13 +38,13 @@ Instructions
   - Open the csproj file using another editor
 3. Look for the chunk of import tasks (`<Import Project"..." />`) at the bottom of the file.  They should look something like this:
 
-    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-    <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+        <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+        <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+        <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 
   Add this after the last import task:
   
-    <Import Project="DeploymentManager.targets" />
+        <Import Project="DeploymentManager.targets" />
   
   NOTE: Be sure that the DeploymentManager.target file already exists in your project, or it will fail to load when you open your project next time.
 
@@ -53,7 +53,7 @@ Instructions
 1. Go to the Process section and expand section 3, Advanced.
 2. Include these arguments in the MSBuild Arguments section:
 
-    /p:DeployToDM=True /p:RgPublishExecutable=..\..\Deploy\RgPublish.exe /p:CsProjPath=[My CsProj File Name].csproj /p:PackageId=MUAssistant.Web.Edge /p:TargetFeed=http://[Url to your nuget server]/
+        /p:DeployToDM=True /p:RgPublishExecutable=..\..\Deploy\RgPublish.exe /p:CsProjPath=[My CsProj File Name].csproj /p:PackageId=MUAssistant.Web.Edge /p:TargetFeed=http://[Url to your nuget server]/
 
 Here's the breakdown of what all of the arguments mean:
 - DeployToDM : This indicates that we want to create a package and publish our application to the deployment manager when a build runs.
