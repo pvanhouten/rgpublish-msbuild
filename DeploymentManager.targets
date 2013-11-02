@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="VerifyProperties;Deploy">
+    <PropertyGroup>
+        <!-- Relative path to RgPublish.exe from the $(SourceDir) -->
+        <!-- Required -->
+        <!-- ex. /Deploy/RGPublish.exe -->
+        <rgPublishExecutable>$(SourceDir)$(RgPublishExecutable)</rgPublishExecutable>
+
+        <!-- Relative path to csproj file from the $(SourceDir) -->
+        <!-- Required -->
+        <csProjPath>$(SourceDir)$(CsProjPath)</csProjPath>
+
+        <!-- Nuget Package ID -->
+        <!-- Required -->
+        <packageId>$(PackageId)</packageId>
+
+        <!-- Package Version -->
+        <!-- Required -->
+        <version>$(BuildNumber)</version>
+
+        <!-- Description -->
+        <!-- Nuget Package Description -->
+        <description>$(Description)</description>
+
+        <!-- Author -->
+        <author>SA Ignite</author>
+
+        <!-- Configuration -->
+        <!-- Required -->
+        <configuration>$(Configuration)</configuration>
+
+        <!-- Target Feed -->
+        <!-- Required -->
+        <targetFeed>$(TargetFeed)</targetFeed>
+
+        <!-- Nuget API Key -->
+        <apiKey>$(ApiKey)</apiKey>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <rgPublishArgs></rgPublishArgs>
+        <rgPublishArgs Condition="'$(csProjPath)' != ''">$(rgPublishArgs) /source=&quot;$(csProjPath)&quot;</rgPublishArgs>
+        <rgPublishArgs Condition="'$(packageId)' != ''">$(rgPublishArgs) /packageid=$(packageId)</rgPublishArgs>
+        <rgPublishArgs Condition="'$(version)' != ''">$(rgPublishArgs) /version=$(version)</rgPublishArgs>
+        <rgPublishArgs Condition="'$(description)' != ''">$(rgPublishArgs) /description=&quot;$(description)&quot;</rgPublishArgs>
+        <rgPublishArgs Condition="'$(author)' != ''">$(rgPublishArgs) /author=&quot;$(author)&quot;</rgPublishArgs>
+        <rgPublishArgs Condition="'$(targetFeed)' != ''">$(rgPublishArgs) /target=feed:$(targetFeed)</rgPublishArgs>
+        <rgPublishArgs Condition="'$(apiKey)' != ''">$(rgPublishArgs) /apikey=&quot;$(apiKey)&quot;</rgPublishArgs>
+        <showErrorMessage Condition="'$(rgPublishArgs)' == ''">true</showErrorMessage>
+        <rgPublish>(echo $(rgPublishExecutable) $(rgPublishArgs) /verbose) | cmd.exe</rgPublish>
+    </PropertyGroup>
+
+    <Target Name="VerifyProperties" Condition="$(DeployToDM) == true">
+        <Error Condition="'$(showErrorMessage)' != ''" Text="You must set the appropriate variables in your build arguments." />
+        <Error Condition="'$(rgPublishExecutable)' == '$(SourceDir)'" Text="You must specify the path to RgPublish.exe (RgPublishExecutable)." />
+        <Error Condition="'$(csProjPath)' == '$(SourceDir)'" Text="You must specify the path to the application proj file (CsProjPath)." />
+        <Error Condition="'$(packageId)' == ''" Text="You must specify the nuget package id (PackageId)." />
+        <Error Condition="'$(version)' == ''" Text="A build version must be specified (version)." />
+        <Error Condition="'$(targetFeed)' == ''" Text="You must specify a target feed url (targetFeed)." />
+    </Target>
+    
+    <Target Name="Deploy" AfterTargets="AfterBuild" Condition="$(DeployToDM) == true">
+        <Message Text="Deploying application to Redgate Deployment Manager." />
+        <Message Text="Starting: $(rgPublish)" />
+        <Exec Command="$(rgPublish)" />
+    </Target>
+</Project>
+
+<!--
+rgpublish.exe 
+  /source=&quot;C:\My Project\MyWebApp.csproj&quot; 
+  /packageid=MyPackage 
+  /version=20131022_2 
+  /description=&quot;My Package Description&quot; 
+  /author=&quot;Phil Van Houten&quot; 
+  /basedir=&quot;$(SourceDir)\Src\&quot;
+  /configuration=Debug 
+  /target=feed:http://url/nuget/
+  /apikey=&quot;supersecretapikey!&quot;
+-->
