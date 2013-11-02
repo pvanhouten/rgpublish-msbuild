@@ -28,27 +28,31 @@ The VS extension doesn't really help me in my scenario because I don't want the 
 Instructions
 ------------
 
-In source control:
-1. Add RgPublish.exe to source control where it can be accessed when the build server pulls down the workspace.  I added it to $/[Team Project]/[Application]/[Branch]/Src/Deploy/RgPublish.exe.
+###In source control:
+1. Add RgPublish.exe to source control where it can be accessed when the build server pulls down the workspace.  I added it to `$/[Team Project]/[Application]/[Branch]/Src/Deploy/RgPublish.exe`.
 
-In your web application project:
+###In your web application project:
 1. Download the DeploymentManager.targets file and add the file to the root of your web application.
 2. Open your web application project file, either:
   - Right click the project, click unload project, then right click the unloaded project and edit the project
   - Open the csproj file using another editor
 3. Look for the chunk of import tasks (`<Import Project"..." />`) at the bottom of the file.  They should look something like this:
+
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
     <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 
   Add this after the last import task:
+  
     <Import Project="DeploymentManager.targets" />
   
   NOTE: Be sure that the DeploymentManager.target file already exists in your project, or it will fail to load when you open your project next time.
 
-In your build (assuming you're using the default template for your builds):
+  
+###In your build (assuming you're using the default template for your builds):
 1. Go to the Process section and expand section 3, Advanced.
 2. Include these arguments in the MSBuild Arguments section:
+
     /p:DeployToDM=True /p:RgPublishExecutable=..\..\Deploy\RgPublish.exe /p:CsProjPath=[My CsProj File Name].csproj /p:PackageId=MUAssistant.Web.Edge /p:TargetFeed=http://[Url to your nuget server]/
 
 Here's the breakdown of what all of the arguments mean:
