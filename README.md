@@ -32,7 +32,7 @@ Instructions
 1. Add RgPublish.exe to source control where it can be accessed when the build server pulls down the workspace.  I added it to `$/[Team Project]/[Application]/[Branch]/Src/Deploy/RgPublish.exe`.
 
 ###In your web application project:
-1. Download the DeploymentManager.targets file and add the file to the root of your web application.
+1. Download the DeploymentManager.targets file and add the file to the root of your web project.
 2. Open your web application project file, either:
   - Right click the project, click unload project, then right click the unloaded project and edit the project
   - Open the csproj file using another editor
@@ -71,3 +71,5 @@ Known Issues
 1. This script has only been set up to cover packaging from a .csproj file.  If you wanted to package a directory, you'd need to tweak the script.
 2. I hate how the pathing is done, but at the moment, it works.  I'd like to change this to use source control paths.  Maybe I'll get to that some day.
 
+
+Let me know if you have any questions or issues.  I know this is rough around the edges, but it gets the job done.  Good luck!
